@@ -1,0 +1,551 @@
+{
+  "meta": {
+    "name": "Fresh Local Bank Guarantee Portal DB",
+    "storage": "local-json",
+    "cloud": false,
+    "createdAt": "2026-06-19T00:00:00.000Z",
+    "updatedAt": "2026-11-22T14:10:06.600Z"
+  },
+  "users": [
+    {
+      "_id": "user-1781870607310-0a1ece44",
+      "displayName": "Demo User",
+      "personalNo": "9876543210",
+      "email": "user@example.com",
+      "role": "user",
+      "status": "active",
+      "passwordHash": "$2b$10$yQJmSRR6mXy1udSlKUz5cePcSZpp9xpyzyp8pQQLtd68KdP8KpwG.",
+      "createdAt": "2026-06-19T12:03:27.309Z",
+      "updatedAt": "2026-11-22T14:09:56.609Z"
+    },
+    {
+      "_id": "admin-1781870607555-ae86df65",
+      "displayName": "BG Admin",
+      "adminPhone": "700001",
+      "adminId": "ADMIN001",
+      "adminUsername": "admin1",
+      "role": "admin",
+      "status": "active",
+      "passwordHash": "$2b$10$SNpkCncTnV/ABusCvmV3meHJR.3kcHdmmmSDavMkzMx0tSQOGqBgC",
+      "createdAt": "2026-06-19T12:03:27.309Z",
+      "updatedAt": "2026-11-22T14:09:56.609Z"
+    },
+    {
+      "_id": "user-1781870708566-bb5135e2",
+      "displayName": "asifparwez41",
+      "personalNo": "8235669508",
+      "email": "asifparwez41@gmail.com",
+      "passwordHash": "$2b$10$C0YmRPOksMsmA1qqGEq8xOMTLfi07AmiirxoDOvj/LErkfSU9AbqK",
+      "role": "user",
+      "status": "active",
+      "createdAt": "2026-06-19T12:05:08.719Z",
+      "updatedAt": "2026-06-19T12:05:08.719Z"
+    },
+    {
+      "_id": "user-1781871623707-930d631c",
+      "displayName": "swatikumari",
+      "personalNo": "7858992105",
+      "email": "swatikumari@gmail.com",
+      "passwordHash": "$2b$10$DmIsS9/clJDc.ql/P.1/QOsnSxlMguWTbfObjnUADUZaJgHypSpCW",
+      "role": "user",
+      "status": "active",
+      "createdAt": "2026-06-19T12:20:23.991Z",
+      "updatedAt": "2026-06-19T12:20:23.991Z"
+    }
+  ],
+  "requests": [
+    {
+      "_id": "request-1781870916001-140be39e",
+      "id": "request-1781870916001-140be39e",
+      "requestId": "BG-2026-915974-178",
+      "requestNumber": "BG-2026-915974-178",
+      "firstOwner": "asifparwez41",
+      "ownerName": "asifparwez41",
+      "alternateOwner": "SANIA ALI",
+      "department": "Utilities",
+      "location": "Jamshedpur",
+      "requestDate": "2026-06-19",
+      "partyName": "Mr Asif Parwez",
+      "workOrderNo": "w-02",
+      "typeOfWork": "Civil Construction",
+      "jobValue": 2000000,
+      "bgNature": "Earnest Money Deposit",
+      "bgAmount": 87857,
+      "bgExpiryDate": "2026-06-25",
+      "bgClaimPeriod": "12 Months",
+      "remarks": "",
+      "approvalTier": "MD Approval",
+      "attachments": {
+        "vet": "/api/requests/files/BG-2026-915974-178-vet-1781870915975-Morgan_Stanley_Final_Work_Status_Report-1.docx",
+        "md": "/api/requests/files/BG-2026-915974-178-md-1781870915982-Morgan_Stanley_Final_Work_Status_Report.pdf",
+        "board": "",
+        "ad": "/api/requests/files/BG-2026-915974-178-ad-1781870915989-Morgan_Stanley_Separated_Professional_Report-1.pdf",
+        "bank": "/api/requests/files/BG-2026-915974-178-bank-1781870915994-Morgan_Stanley_Separated_Professional_Report.pdf",
+        "other": []
+      },
+      "attachmentMeta": {
+        "vet": {
+          "category": "vet",
+          "type": "vet",
+          "originalName": "Morgan_Stanley_Final_Work_Status_Report (1).docx",
+          "storedName": "BG-2026-915974-178-vet-1781870915975-Morgan_Stanley_Final_Work_Status_Report-1.docx",
+          "mimeType": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          "size": 3690549,
+          "sizeBytes": 3690549,
+          "url": "/api/requests/files/BG-2026-915974-178-vet-1781870915975-Morgan_Stanley_Final_Work_Status_Report-1.docx",
+          "viewUrl": "/api/requests/files/BG-2026-915974-178-vet-1781870915975-Morgan_Stanley_Final_Work_Status_Report-1.docx",
+          "downloadUrl": "/api/requests/files/BG-2026-915974-178-vet-1781870915975-Morgan_Stanley_Final_Work_Status_Report-1.docx"
+        },
+        "md": {
+          "category": "md",
+          "type": "md",
+          "originalName": "Morgan_Stanley_Final_Work_Status_Report.pdf",
+          "storedName": "BG-2026-915974-178-md-1781870915982-Morgan_Stanley_Final_Work_Status_Report.pdf",
+          "mimeType": "application/pdf",
+          "size": 5912477,
+          "sizeBytes": 5912477,
+          "url": "/api/requests/files/BG-2026-915974-178-md-1781870915982-Morgan_Stanley_Final_Work_Status_Report.pdf",
+          "viewUrl": "/api/requests/files/BG-2026-915974-178-md-1781870915982-Morgan_Stanley_Final_Work_Status_Report.pdf",
+          "downloadUrl": "/api/requests/files/BG-2026-915974-178-md-1781870915982-Morgan_Stanley_Final_Work_Status_Report.pdf"
+        },
+        "board": null,
+        "ad": {
+          "category": "ad",
+          "type": "ad",
+          "originalName": "Morgan_Stanley_Separated_Professional_Report (1).pdf",
+          "storedName": "BG-2026-915974-178-ad-1781870915989-Morgan_Stanley_Separated_Professional_Report-1.pdf",
+          "mimeType": "application/pdf",
+          "size": 6838533,
+          "sizeBytes": 6838533,
+          "url": "/api/requests/files/BG-2026-915974-178-ad-1781870915989-Morgan_Stanley_Separated_Professional_Report-1.pdf",
+          "viewUrl": "/api/requests/files/BG-2026-915974-178-ad-1781870915989-Morgan_Stanley_Separated_Professional_Report-1.pdf",
+          "downloadUrl": "/api/requests/files/BG-2026-915974-178-ad-1781870915989-Morgan_Stanley_Separated_Professional_Report-1.pdf"
+        },
+        "bank": {
+          "category": "bank",
+          "type": "bank",
+          "originalName": "Morgan_Stanley_Separated_Professional_Report.pdf",
+          "storedName": "BG-2026-915974-178-bank-1781870915994-Morgan_Stanley_Separated_Professional_Report.pdf",
+          "mimeType": "application/pdf",
+          "size": 6838533,
+          "sizeBytes": 6838533,
+          "url": "/api/requests/files/BG-2026-915974-178-bank-1781870915994-Morgan_Stanley_Separated_Professional_Report.pdf",
+          "viewUrl": "/api/requests/files/BG-2026-915974-178-bank-1781870915994-Morgan_Stanley_Separated_Professional_Report.pdf",
+          "downloadUrl": "/api/requests/files/BG-2026-915974-178-bank-1781870915994-Morgan_Stanley_Separated_Professional_Report.pdf"
+        },
+        "other": []
+      },
+      "status": "Pending",
+      "adminNote": "",
+      "email": "asifparwez41@gmail.com",
+      "phone": "8235669508",
+      "ownerPersonalNo": "8235669508",
+      "statusTimeline": [
+        {
+          "from": null,
+          "to": "Pending",
+          "by": "asifparwez41",
+          "role": "user",
+          "note": "Request submitted by requester.",
+          "at": "2026-06-19T12:08:36.001Z"
+        },
+        {
+          "from": "Pending",
+          "to": "Rejected",
+          "by": "BG Admin",
+          "role": "admin",
+          "note": "Status changed to Rejected.",
+          "at": "2026-06-19T12:44:35.592Z"
+        }
+      ],
+      "createdAt": "2026-06-19T12:08:36.001Z",
+      "updatedAt": "2026-06-19T12:44:42.528Z"
+    },
+    {
+      "_id": "request-1781871829146-1da21622",
+      "id": "request-1781871829146-1da21622",
+      "requestId": "BG-2026-829130-316",
+      "requestNumber": "BG-2026-829130-316",
+      "firstOwner": "swatikumari",
+      "ownerName": "swatikumari",
+      "alternateOwner": "abc",
+      "department": "Infrastructure",
+      "location": "Jamshedpur",
+      "requestDate": "2026-06-19",
+      "partyName": "Swati Kumari",
+      "workOrderNo": "WO-002",
+      "typeOfWork": "IT Consultancy",
+      "jobValue": 24687,
+      "bgNature": "Performance BG",
+      "bgAmount": 1257487,
+      "bgExpiryDate": "2026-06-25",
+      "bgClaimPeriod": "6 Months",
+      "remarks": "please accept",
+      "approvalTier": "MD Approval",
+      "attachments": {
+        "vet": "/api/requests/files/BG-2026-829130-316-vet-1781871829131-Sonal.docx",
+        "md": "/api/requests/files/BG-2026-829130-316-md-1781871829137-sonal.pdf",
+        "board": "",
+        "ad": "/api/requests/files/BG-2026-829130-316-ad-1781871829140-sonal.pdf",
+        "bank": "/api/requests/files/BG-2026-829130-316-bank-1781871829142-sonal.pdf",
+        "other": []
+      },
+      "attachmentMeta": {
+        "vet": {
+          "category": "vet",
+          "type": "vet",
+          "originalName": "Sonal.docx",
+          "storedName": "BG-2026-829130-316-vet-1781871829131-Sonal.docx",
+          "mimeType": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          "size": 237537,
+          "sizeBytes": 237537,
+          "url": "/api/requests/files/BG-2026-829130-316-vet-1781871829131-Sonal.docx",
+          "viewUrl": "/api/requests/files/BG-2026-829130-316-vet-1781871829131-Sonal.docx",
+          "downloadUrl": "/api/requests/files/BG-2026-829130-316-vet-1781871829131-Sonal.docx"
+        },
+        "md": {
+          "category": "md",
+          "type": "md",
+          "originalName": "sonal.pdf",
+          "storedName": "BG-2026-829130-316-md-1781871829137-sonal.pdf",
+          "mimeType": "application/pdf",
+          "size": 248835,
+          "sizeBytes": 248835,
+          "url": "/api/requests/files/BG-2026-829130-316-md-1781871829137-sonal.pdf",
+          "viewUrl": "/api/requests/files/BG-2026-829130-316-md-1781871829137-sonal.pdf",
+          "downloadUrl": "/api/requests/files/BG-2026-829130-316-md-1781871829137-sonal.pdf"
+        },
+        "board": null,
+        "ad": {
+          "category": "ad",
+          "type": "ad",
+          "originalName": "sonal.pdf",
+          "storedName": "BG-2026-829130-316-ad-1781871829140-sonal.pdf",
+          "mimeType": "application/pdf",
+          "size": 248835,
+          "sizeBytes": 248835,
+          "url": "/api/requests/files/BG-2026-829130-316-ad-1781871829140-sonal.pdf",
+          "viewUrl": "/api/requests/files/BG-2026-829130-316-ad-1781871829140-sonal.pdf",
+          "downloadUrl": "/api/requests/files/BG-2026-829130-316-ad-1781871829140-sonal.pdf"
+        },
+        "bank": {
+          "category": "bank",
+          "type": "bank",
+          "originalName": "sonal.pdf",
+          "storedName": "BG-2026-829130-316-bank-1781871829142-sonal.pdf",
+          "mimeType": "application/pdf",
+          "size": 248835,
+          "sizeBytes": 248835,
+          "url": "/api/requests/files/BG-2026-829130-316-bank-1781871829142-sonal.pdf",
+          "viewUrl": "/api/requests/files/BG-2026-829130-316-bank-1781871829142-sonal.pdf",
+          "downloadUrl": "/api/requests/files/BG-2026-829130-316-bank-1781871829142-sonal.pdf"
+        },
+        "other": []
+      },
+      "status": "Pending",
+      "adminNote": "",
+      "email": "swatikumari@gmail.com",
+      "phone": "7858992105",
+      "ownerPersonalNo": "7858992105",
+      "statusTimeline": [
+        {
+          "from": null,
+          "to": "Pending",
+          "by": "swatikumari",
+          "role": "user",
+          "note": "Request submitted by requester.",
+          "at": "2026-06-19T12:23:49.146Z"
+        },
+        {
+          "from": "Pending",
+          "to": "Approved",
+          "by": "BG Admin",
+          "role": "admin",
+          "note": "Status changed to Approved.",
+          "at": "2026-06-19T12:44:17.321Z"
+        }
+      ],
+      "createdAt": "2026-06-19T12:23:49.146Z",
+      "updatedAt": "2026-06-19T12:44:28.734Z"
+    }
+  ],
+  "otps": [
+    {
+      "otpToken": "4a35ee03bc17cbf1bcef5f9610f4890b692170d6",
+      "otp": "609921",
+      "role": "admin",
+      "userId": "admin-1781870607555-ae86df65",
+      "createdAt": "2026-11-22T14:09:34.884Z",
+      "expiresAt": "2026-11-22T14:14:34.884Z",
+      "usedAt": null
+    }
+  ],
+  "sessions": [
+    {
+      "token": "fb69c202bd2b95564331191e829ff652bc23ee5adcfea2937f66c0090a297eec",
+      "userId": "admin-1781870607555-ae86df65",
+      "role": "admin",
+      "createdAt": "2026-11-22T14:10:06.599Z",
+      "expiresAt": "2026-11-22T22:10:06.598Z",
+      "revokedAt": null
+    }
+  ],
+  "auditLogs": [
+    {
+      "_id": "audit-1781870708719-9654c44d",
+      "action": "USER_REGISTERED",
+      "actorId": "user-1781870708566-bb5135e2",
+      "role": "user",
+      "createdAt": "2026-06-19T12:05:08.719Z",
+      "meta": {
+        "personalNo": "8235669508",
+        "email": "asifparwez41@gmail.com"
+      }
+    },
+    {
+      "_id": "audit-1781870715796-653af80f",
+      "action": "OTP_CREATED",
+      "actorId": "user-1781870708566-bb5135e2",
+      "role": "user",
+      "createdAt": "2026-06-19T12:05:15.797Z",
+      "meta": {
+        "demoOtpVisibleOnScreen": true
+      }
+    },
+    {
+      "_id": "audit-1781870726286-faf5bb31",
+      "action": "LOGIN_SUCCESS",
+      "actorId": "user-1781870708566-bb5135e2",
+      "role": "user",
+      "createdAt": "2026-06-19T12:05:26.286Z",
+      "meta": {
+        "displayName": "asifparwez41"
+      }
+    },
+    {
+      "_id": "audit-1781870916005-e5fa9b8e",
+      "action": "REQUEST_SUBMITTED",
+      "actorId": "user-1781870708566-bb5135e2",
+      "role": "user",
+      "entityId": "request-1781870916001-140be39e",
+      "requestId": "BG-2026-915974-178",
+      "createdAt": "2026-06-19T12:08:36.001Z",
+      "meta": {
+        "approvalTier": "MD Approval",
+        "bgAmount": 87857
+      }
+    },
+    {
+      "_id": "audit-1781871623991-1c46b593",
+      "action": "USER_REGISTERED",
+      "actorId": "user-1781871623707-930d631c",
+      "role": "user",
+      "createdAt": "2026-06-19T12:20:23.992Z",
+      "meta": {
+        "personalNo": "7858992105",
+        "email": "swatikumari@gmail.com"
+      }
+    },
+    {
+      "_id": "audit-1781871638854-c1057307",
+      "action": "OTP_CREATED",
+      "actorId": "user-1781871623707-930d631c",
+      "role": "user",
+      "createdAt": "2026-06-19T12:20:38.854Z",
+      "meta": {
+        "demoOtpVisibleOnScreen": true
+      }
+    },
+    {
+      "_id": "audit-1781871661946-d2967a8b",
+      "action": "OTP_CREATED",
+      "actorId": "user-1781871623707-930d631c",
+      "role": "user",
+      "createdAt": "2026-06-19T12:21:01.946Z",
+      "meta": {
+        "demoOtpVisibleOnScreen": true
+      }
+    },
+    {
+      "_id": "audit-1781871687797-5689b14e",
+      "action": "LOGIN_SUCCESS",
+      "actorId": "user-1781871623707-930d631c",
+      "role": "user",
+      "createdAt": "2026-06-19T12:21:27.797Z",
+      "meta": {
+        "displayName": "swatikumari"
+      }
+    },
+    {
+      "_id": "audit-1781871829150-d8e04991",
+      "action": "REQUEST_SUBMITTED",
+      "actorId": "user-1781871623707-930d631c",
+      "role": "user",
+      "entityId": "request-1781871829146-1da21622",
+      "requestId": "BG-2026-829130-316",
+      "createdAt": "2026-06-19T12:23:49.146Z",
+      "meta": {
+        "approvalTier": "MD Approval",
+        "bgAmount": 1257487
+      }
+    },
+    {
+      "_id": "audit-1781871918918-a08610f9",
+      "action": "OTP_CREATED",
+      "actorId": "admin-1781870607555-ae86df65",
+      "role": "admin",
+      "createdAt": "2026-06-19T12:25:18.918Z",
+      "meta": {
+        "demoOtpVisibleOnScreen": true
+      }
+    },
+    {
+      "_id": "audit-1781871980200-53f5b6fe",
+      "action": "LOGIN_SUCCESS",
+      "actorId": "admin-1781870607555-ae86df65",
+      "role": "admin",
+      "createdAt": "2026-06-19T12:26:20.200Z",
+      "meta": {
+        "displayName": "BG Admin"
+      }
+    },
+    {
+      "_id": "audit-1781872261929-e02b84e4",
+      "action": "OTP_CREATED",
+      "actorId": "user-1781871623707-930d631c",
+      "role": "user",
+      "createdAt": "2026-06-19T12:31:01.929Z",
+      "meta": {
+        "demoOtpVisibleOnScreen": true
+      }
+    },
+    {
+      "_id": "audit-1781872276492-878bd1fd",
+      "action": "LOGIN_SUCCESS",
+      "actorId": "user-1781871623707-930d631c",
+      "role": "user",
+      "createdAt": "2026-06-19T12:31:16.492Z",
+      "meta": {
+        "displayName": "swatikumari"
+      }
+    },
+    {
+      "_id": "audit-1781872828694-bd9bebf7",
+      "action": "OTP_CREATED",
+      "actorId": "user-1781871623707-930d631c",
+      "role": "user",
+      "createdAt": "2026-06-19T12:40:28.696Z",
+      "meta": {
+        "demoOtpVisibleOnScreen": true
+      }
+    },
+    {
+      "_id": "audit-1781872841512-c29b1032",
+      "action": "LOGIN_SUCCESS",
+      "actorId": "user-1781871623707-930d631c",
+      "role": "user",
+      "createdAt": "2026-06-19T12:40:41.512Z",
+      "meta": {
+        "displayName": "swatikumari"
+      }
+    },
+    {
+      "_id": "audit-1781872899186-8db34d8e",
+      "action": "OTP_CREATED",
+      "actorId": "admin-1781870607555-ae86df65",
+      "role": "admin",
+      "createdAt": "2026-06-19T12:41:39.186Z",
+      "meta": {
+        "demoOtpVisibleOnScreen": true
+      }
+    },
+    {
+      "_id": "audit-1781872912960-5607d3c3",
+      "action": "LOGIN_SUCCESS",
+      "actorId": "admin-1781870607555-ae86df65",
+      "role": "admin",
+      "createdAt": "2026-06-19T12:41:52.960Z",
+      "meta": {
+        "displayName": "BG Admin"
+      }
+    },
+    {
+      "_id": "audit-1781872985996-37787266",
+      "action": "OTP_CREATED",
+      "actorId": "admin-1781870607555-ae86df65",
+      "role": "admin",
+      "createdAt": "2026-06-19T12:43:05.996Z",
+      "meta": {
+        "demoOtpVisibleOnScreen": true
+      }
+    },
+    {
+      "_id": "audit-1781873002052-8998e5d9",
+      "action": "LOGIN_SUCCESS",
+      "actorId": "admin-1781870607555-ae86df65",
+      "role": "admin",
+      "createdAt": "2026-06-19T12:43:22.052Z",
+      "meta": {
+        "displayName": "BG Admin"
+      }
+    },
+    {
+      "_id": "audit-1781873057321-ca1ba0b2",
+      "action": "REQUEST_STATUS_UPDATED",
+      "actorId": "admin-1781870607555-ae86df65",
+      "role": "admin",
+      "entityId": "request-1781871829146-1da21622",
+      "requestId": "BG-2026-829130-316",
+      "createdAt": "2026-06-19T12:44:17.321Z",
+      "meta": {
+        "from": "Pending",
+        "to": "Approved",
+        "adminNote": ""
+      }
+    },
+    {
+      "_id": "audit-1781873075592-d72d5ffa",
+      "action": "REQUEST_STATUS_UPDATED",
+      "actorId": "admin-1781870607555-ae86df65",
+      "role": "admin",
+      "entityId": "request-1781870916001-140be39e",
+      "requestId": "BG-2026-915974-178",
+      "createdAt": "2026-06-19T12:44:35.592Z",
+      "meta": {
+        "from": "Pending",
+        "to": "Rejected",
+        "adminNote": ""
+      }
+    },
+    {
+      "_id": "audit-1795356574884-5cb50b68",
+      "action": "OTP_CREATED",
+      "actorId": "admin-1781870607555-ae86df65",
+      "role": "admin",
+      "createdAt": "2026-11-22T14:09:34.884Z",
+      "meta": {
+        "demoOtpVisibleOnScreen": true
+      }
+    },
+    {
+      "_id": "audit-1795356596748-3c793e9b",
+      "action": "OTP_CREATED",
+      "actorId": "admin-1781870607555-ae86df65",
+      "role": "admin",
+      "createdAt": "2026-11-22T14:09:56.748Z",
+      "meta": {
+        "demoOtpVisibleOnScreen": true
+      }
+    },
+    {
+      "_id": "audit-1795356606599-ff196267",
+      "action": "LOGIN_SUCCESS",
+      "actorId": "admin-1781870607555-ae86df65",
+      "role": "admin",
+      "createdAt": "2026-11-22T14:10:06.599Z",
+      "meta": {
+        "displayName": "BG Admin"
+      }
+    }
+  ]
+}

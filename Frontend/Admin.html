@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(to right, #02006b, #0000ff);
+            color: white;
+            padding: 30px 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .controls {
+            padding: 20px 40px;
+            background: #f7f7f7;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 10px 15px;
+            border: 2px solid #d3d3d3;
+            border-radius: 25px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .search-box input:focus {
+            border-color: #0000ff;
+        }
+
+        .filter-btn {
+            padding: 10px 20px;
+            border: 2px solid #d3d3d3;
+            background: white;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .filter-btn:hover {
+            border-color: #0000ff;
+            color: #0000ff;
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(to right, #02006b, #0000ff);
+            color: white;
+            border-color: #0000ff;
+        }
+
+        .table-wrapper {
+            padding: 20px 40px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #f0f0f0;
+        }
+
+        th {
+            padding: 15px;
+            text-align: left;
+            font-weight: bold;
+            color: #333;
+            border-bottom: 2px solid #d3d3d3;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        tbody tr {
+            transition: background-color 0.2s;
+        }
+
+        tbody tr:hover {
+            background: #f9f9f9;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            text-align: center;
+            min-width: 80px;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-accepted {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-rejected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .status-under-review {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-accept,
+        .btn-reject {
+            padding: 8px 14px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 13px;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .btn-accept {
+            background: #4caf50;
+            color: white;
+            box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3);
+        }
+
+        .btn-accept:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .btn-accept:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .btn-reject {
+            background: #f44336;
+            color: white;
+            box-shadow: 0 4px 10px rgba(244, 67, 54, 0.3);
+        }
+
+        .btn-reject:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .btn-reject:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        /* Modal Styling */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            width: 420px;
+            max-width: 90vw;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            transform: scale(0.8);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .modal-overlay.active .modal-card {
+            transform: scale(1);
+        }
+
+        .modal-icon {
+            width: 70px;
+            height: 70px;
+            color: white;
+            font-size: 36px;
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-icon.success {
+            background: #4caf50;
+        }
+
+        .modal-icon.error {
+            background: #f44336;
+        }
+
+        .modal-icon.warning {
+            background: #ff9800;
+        }
+
+        .modal-card h2 {
+            font-size: 24px;
+            color: #222;
+            margin-bottom: 12px;
+        }
+
+        .modal-card p {
+            font-size: 15px;
+            color: #666;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .modal-btn {
+            padding: 10px 25px;
+            border: 2px solid #d3d3d3;
+            background: white;
+            color: #333;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            min-width: 100px;
+        }
+
+        .modal-btn.confirm {
+            background: linear-gradient(to right, #02006b, #0000ff);
+            color: white;
+            border-color: #0000ff;
+            box-shadow: 0 4px 10px rgba(0, 0, 255, 0.2);
+        }
+
+        .modal-btn.confirm:hover {
+            opacity: 0.9;
+        }
+
+        .modal-btn.cancel:hover {
+            border-color: #0000ff;
+            background: #f7f7f7;
+        }
+
+        .stats {
+            padding: 20px 40px;
+            background: #f7f7f7;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-card h3 {
+            font-size: 28px;
+            color: #0000ff;
+            margin-bottom: 5px;
+        }
+
+        .stat-card p {
+            font-size: 13px;
+            color: #666;
+            font-weight: bold;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+
+        .empty-state p {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .controls {
+                flex-direction: column;
+                padding: 15px;
+            }
+
+            .search-box {
+                min-width: 100%;
+            }
+
+            .table-wrapper {
+                padding: 15px;
+            }
+
+            th,
+            td {
+                padding: 10px;
+                font-size: 13px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .btn-accept,
+            .btn-reject {
+                width: 100%;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+                padding: 15px;
+            }
+        }
+    
+
+        /* MNC admin polish + aligned controls patch */
+        body { background: #eef3fb; padding: 24px; }
+        .container { max-width: 1320px; border-radius: 22px; box-shadow: 0 22px 60px rgba(15,23,42,.14); }
+        .header { background: linear-gradient(135deg, #0f172a, #1d4ed8); text-align:left; padding: 28px 36px; }
+        .header h1 { font-size: 30px; letter-spacing: -.03em; }
+        .header p { margin-top: 6px; }
+        .controls { background:#fff; padding:18px 28px; gap:10px; align-items:center; }
+        .search-box input, #editName, #editEmail, #editPhone, #editStatus { border-radius: 12px !important; border:1px solid #dbe3ef !important; background:#f8fafc; }
+        .search-box input:focus, #editName:focus, #editEmail:focus, #editPhone:focus, #editStatus:focus { border-color:#2563eb !important; box-shadow:0 0 0 4px rgba(37,99,235,.12); }
+        .filter-btn, .btn-accept, .btn-reject, .modal-btn { border-radius: 12px !important; min-height: 40px; display:inline-flex; align-items:center; justify-content:center; gap:6px; }
+        .filter-btn { border:1px solid #dbe3ef; color:#334155; }
+        .filter-btn.active { background:#0f172a; border-color:#0f172a; }
+        .table-wrapper { padding: 22px 28px; }
+        #dataTable { min-width: 980px; border:1px solid #e5e7eb; border-radius: 16px; overflow:hidden; }
+        thead { background:#f8fafc; }
+        th { color:#475569; font-size:12px; text-transform:uppercase; letter-spacing:.05em; }
+        td { color:#1f2937; vertical-align:middle; }
+        .action-buttons { flex-wrap: wrap; gap: 8px; min-width: 280px; }
+        .btn-accept { background:#059669; box-shadow:none; color:#fff; }
+        .btn-reject { background:#dc2626; box-shadow:none; color:#fff; }
+        .btn-accept:hover, .btn-reject:hover, .filter-btn:hover { transform: translateY(-1px); }
+        .status-approved, .status-accepted { background:#dcfce7; color:#166534; }
+        .status-rejected { background:#fee2e2; color:#991b1b; }
+        .status-under-review { background:#dbeafe; color:#1d4ed8; }
+        .status-pending { background:#fef3c7; color:#92400e; }
+        .stats { background:#f8fafc; padding: 22px 28px; }
+        .stat-card { border:1px solid #e5e7eb; border-radius:16px; box-shadow:0 8px 24px rgba(15,23,42,.06); }
+        .stat-card h3 { color:#1d4ed8; }
+        .modal-card { border-radius:20px; }
+        .file-link { display:inline-flex; align-items:center; gap:5px; margin:3px 4px 3px 0; padding:6px 8px; border-radius:9px; background:#eff6ff; color:#1d4ed8; font-weight:800; font-size:12px; text-decoration:none; }
+        .admin-guard-note { padding: 10px 14px; border-radius: 12px; background: #eff6ff; color:#1e3a8a; font-weight:800; font-size:13px; }
+        @media(max-width:768px){ body{padding:10px}.header{padding:22px}.controls{padding:14px}.table-wrapper{padding:14px}.header a{position:static!important;display:inline-flex;margin-top:12px;transform:none!important} }
+</style>
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <div class="header" style="position: relative;">
+            <h1>Admin Dashboard</h1>
+            <p>Manage BG requests with RBAC tracking</p>
+            <a href="/" onclick="localStorage.clear()" style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); color: white; text-decoration: none; background: rgba(255, 255, 255, 0.2); padding: 8px 16px; border-radius: 20px; font-weight: bold; font-size: 14px; transition: background 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">Logout</a>
+        </div>
+
+        <!-- CONTROLS -->
+        <div class="controls">
+            <div class="search-box">
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Search by name, email, or phone..."
+                />
+            </div>
+            <button class="filter-btn active" data-filter="all" onclick="filterTable('all')">
+                All
+            </button>
+            <button class="filter-btn" data-filter="pending" onclick="filterTable('pending')">
+                Pending
+            </button>
+            <button class="filter-btn" data-filter="under-review" onclick="filterTable('under-review')">
+                Under Review
+            </button>
+            <button class="filter-btn" data-filter="approved" onclick="filterTable('approved')">
+                Accepted
+            </button>
+            <button class="filter-btn" data-filter="rejected" onclick="filterTable('rejected')">
+                Rejected
+            </button>
+            <button class="filter-btn" onclick="loadUsersFromFile()" title="Load requests from backend server">
+              Load Requests
+            </button>
+            <button class="filter-btn" onclick="downloadCurrentData()" title="Download current data as JSON">
+                Download Data
+            </button>
+        </div>
+
+        <!-- TABLE -->
+        <div class="table-wrapper">
+            <table id="dataTable">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Submitted On</th>
+                        <th>Attachments</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <!-- Rows will be populated by JavaScript -->
+                </tbody>
+            </table>
+            <div id="emptyState" class="empty-state" style="display: none;">
+                <p>No data found</p>
+            </div>
+        </div>
+
+        <!-- STATS -->
+        <div class="stats">
+            <div class="stat-card">
+                <h3 id="totalCount">0</h3>
+                <p>Total Submissions</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="pendingCount">0</h3>
+                <p>Pending</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="approvedCount">0</h3>
+                <p>Approved</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="rejectedCount">0</h3>
+                <p>Rejected</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- EDIT MODAL -->
+    <div id="editModal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-icon warning">✎</div>
+            <h2 id="editTitle">Edit User</h2>
+            <p id="editMessage">Modify the user details and save.</p>
+            <div style="text-align:left; margin-top:10px;">
+                <label>Name</label>
+                <input id="editName" type="text" style="width:100%;padding:8px;margin:6px 0;border:1px solid #ddd;border-radius:6px;" />
+                <label>Email</label>
+                <input id="editEmail" type="email" style="width:100%;padding:8px;margin:6px 0;border:1px solid #ddd;border-radius:6px;" />
+                <label>Phone</label>
+                <input id="editPhone" type="text" style="width:100%;padding:8px;margin:6px 0;border:1px solid #ddd;border-radius:6px;" />
+                <label>Status</label>
+                <select id="editStatus" style="width:100%;padding:8px;margin:6px 0;border:1px solid #ddd;border-radius:6px;">
+                    <option value="pending">Pending</option>
+                    <option value="under-review">Under Review</option>
+                    <option value="approved">Approved</option>
+                    <option value="rejected">Rejected</option>
+                </select>
+            </div>
+            <div class="modal-buttons" style="margin-top:16px;">
+                <button class="modal-btn confirm" onclick="saveEdit()">Save</button>
+                <button class="modal-btn cancel" onclick="closeEditModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- DETAILS MODAL -->
+    <div id="detailsModal" class="modal-overlay">
+        <div class="modal-card" style="width: 720px; text-align:left; max-height: 85vh; overflow:auto;">
+            <div class="modal-icon warning" style="margin-left:auto;margin-right:auto;">ℹ</div>
+            <h2 style="text-align:center;" id="detailsTitle">Request Details</h2>
+            <div id="detailsContent" style="font-size:14px;line-height:1.7;color:#333;margin-top:10px;"></div>
+            <div class="modal-buttons" style="margin-top:16px;">
+                <button class="modal-btn cancel" onclick="closeDetailsModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONFIRMATION MODAL -->
+    <div id="confirmationModal" class="modal-overlay">
+        <div class="modal-card">
+            <div id="confirmIcon" class="modal-icon warning">!</div>
+            <h2 id="confirmTitle">Confirm Action</h2>
+            <p id="confirmMessage">Are you sure about this action?</p>
+            <div class="modal-buttons">
+                <button class="modal-btn confirm" onclick="confirmAction()">Yes, Confirm</button>
+                <button class="modal-btn cancel" onclick="closeModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- RESULT MODAL -->
+    <div id="resultModal" class="modal-overlay">
+        <div class="modal-card">
+            <div id="resultIcon" class="modal-icon success">✓</div>
+            <h2 id="resultTitle">Success!</h2>
+            <p id="resultMessage">Action completed successfully.</p>
+            <button class="modal-btn confirm" onclick="closeResultModal()"
+                style="width: 100%; margin-top: 15px;">
+                OK
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let allData = [];
+        let currentFilter = 'all';
+        let pendingAction = null;
+        let editingId = null;
+
+        window.addEventListener('DOMContentLoaded', () => {
+            if (localStorage.getItem('role') !== 'admin' || !localStorage.getItem('bgToken')) { window.location.href = '/'; return; }
+            const adminName = localStorage.getItem('userName') || 'Admin';
+            const sub = document.querySelector('.header p');
+            if (sub) sub.textContent = `Manage User Requests - Logged in as ${adminName}`;
+            loadUsersFromFile();
+            setupSearch();
+        });
+        function authHeaders(extra = {}) { return { ...extra, Authorization: 'Bearer ' + (localStorage.getItem('bgToken') || '') }; }
+        function escapeHtml(value) { return String(value ?? '').replace(/[&<>\"]/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '\"': '&quot;' }[char])); }
+        function statusKey(status) { const raw = String(status || 'Pending').toLowerCase().replace(/[_\s]+/g, '-'); if (raw === 'accepted' || raw === 'approve') return 'approved'; if (raw === 'review' || raw === 'reviewing') return 'under-review'; return raw; }
+        function statusLabel(key) { if (key === 'accepted' || key === 'approved') return 'Approved'; if (key === 'rejected') return 'Rejected'; if (key === 'under-review') return 'Under Review'; return 'Pending'; }
+        function formatAmount(value) { const num = Number(value || 0); return Number.isFinite(num) && num > 0 ? `₹${num.toLocaleString('en-IN')}` : 'N/A'; }
+        function attachmentLink(url, label) { return url ? `<a class="file-link" href="${url}" target="_blank" download>${label}</a>` : ''; }
+
+        function renderTable(rows = allData) {
+            const tableBody = document.getElementById('tableBody');
+            const emptyState = document.getElementById('emptyState');
+            tableBody.innerHTML = '';
+            let filteredData = rows;
+            if (currentFilter !== 'all') filteredData = rows.filter((row) => row.status === currentFilter);
+            if (filteredData.length === 0) { emptyState.style.display = 'block'; return; }
+            emptyState.style.display = 'none';
+            filteredData.forEach((row) => {
+                const tr = document.createElement('tr');
+                const isFinal = row.status === 'approved' || row.status === 'accepted' || row.status === 'rejected';
+                const atts = row.attachments || {};
+                let attsHtml = attachmentLink(atts.vet, '📄 Download Draft') + attachmentLink(atts.md, '👔 Download MD Approval') + attachmentLink(atts.board, '⚖️ Download Board Approval') + attachmentLink(atts.ad, '📣 Download Clause Detail') + attachmentLink(atts.bank, '🏦 Download Bank Details');
+                if (!attsHtml) attsHtml = '<span style="color:#999; font-size:12px;">No files</span>';
+                tr.innerHTML = `
+                    <td>${escapeHtml(row.requestId || row.id)}</td>
+                    <td>${escapeHtml(row.name)}</td>
+                    <td>${escapeHtml(row.email)}</td>
+                    <td>${escapeHtml(row.phone)}</td>
+                    <td>${escapeHtml(row.submittedOn)}</td>
+                    <td><div style="max-height: 90px; overflow-y: auto;">${attsHtml}</div></td>
+                    <td><span class="status-badge status-${row.status}">${statusLabel(row.status)}</span></td>
+                    <td><div class="action-buttons">
+                        <button class="filter-btn" style="padding:6px 10px;border-radius:8px;" onclick="showDetailsModal('${row.id}')">Details</button>
+                        <button class="filter-btn" ${isFinal ? 'disabled' : ''} style="padding:6px 10px;border-radius:8px;" onclick="showConfirmation('${row.id}', 'review')">Review</button>
+                        <button class="btn-accept" ${isFinal ? 'disabled' : ''} onclick="showConfirmation('${row.id}', 'approve')">✓ Approve</button>
+                        <button class="btn-reject" ${isFinal ? 'disabled' : ''} onclick="showConfirmation('${row.id}', 'reject')">✕ Reject</button>
+                        <button class="filter-btn" style="padding:6px 10px;border-radius:8px;" onclick="showEditModal('${row.id}')">Edit</button>
+                    </div></td>`;
+                tableBody.appendChild(tr);
+            });
+        }
+        function filterTable(filter) { currentFilter = filter; document.querySelectorAll('.filter-btn[data-filter]').forEach((btn) => btn.classList.remove('active')); const active = document.querySelector(`[data-filter="${filter}"]`); if (active) active.classList.add('active'); renderTable(); }
+        function setupSearch() { const searchInput = document.getElementById('searchInput'); searchInput.addEventListener('input', (e) => { const searchTerm = e.target.value.toLowerCase(); const filtered = allData.filter((row) => [row.name, row.email, row.phone, row.requestId, row.partyName, row.department].some((value) => String(value || '').toLowerCase().includes(searchTerm))); renderTable(filtered); updateStats(filtered); }); }
+        function updateStats(rows = allData) { document.getElementById('totalCount').textContent = rows.length; document.getElementById('pendingCount').textContent = rows.filter((r) => r.status === 'pending').length; document.getElementById('approvedCount').textContent = rows.filter((r) => r.status === 'approved' || r.status === 'accepted').length; document.getElementById('rejectedCount').textContent = rows.filter((r) => r.status === 'rejected').length; }
+        function showConfirmation(id, action) {
+            const row = allData.find((r) => r.id === id);
+            if (!row) return;
+            const isApprove = action === 'approve' || action === 'accept';
+            const actionMap = { approve: 'APPROVE', accept: 'APPROVE', reject: 'REJECT', review: 'MARK UNDER REVIEW' };
+            document.getElementById('confirmTitle').textContent = `${actionMap[action] || 'UPDATE'} Submission`;
+            document.getElementById('confirmMessage').textContent = `${actionMap[action] || 'UPDATE'} the BG request from ${row.name} (${row.email || row.phone})?`;
+            document.getElementById('confirmIcon').className = action === 'reject' ? 'modal-icon error' : isApprove ? 'modal-icon success' : 'modal-icon warning';
+            document.getElementById('confirmIcon').textContent = action === 'reject' ? '✕' : isApprove ? '✓' : '!';
+            pendingAction = { id, action };
+            document.getElementById('confirmationModal').classList.add('active');
+        }
+
+        async function confirmAction() {
+            if (!pendingAction) return;
+            const { id, action } = pendingAction;
+            const row = allData.find((r) => r.id === id);
+            if (!row) return;
+            const isApprove = action === 'approve' || action === 'accept';
+            const newStatus = isApprove ? 'Approved' : action === 'reject' ? 'Rejected' : 'Under Review';
+            try {
+                const res = await fetch(`/api/requests/${encodeURIComponent(id)}/status`, {
+                    method: 'PUT',
+                    headers: authHeaders({ 'Content-Type': 'application/json' }),
+                    body: JSON.stringify({ status: newStatus })
+                });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.message || 'Unable to update request status.');
+                row.status = statusKey(data.status || newStatus);
+                row.adminNote = data.adminNote || row.adminNote || '';
+                document.getElementById('resultIcon').className = action === 'reject' ? 'modal-icon error' : 'modal-icon success';
+                document.getElementById('resultIcon').textContent = action === 'reject' ? '✕' : '✓';
+                document.getElementById('resultTitle').textContent = 'Status Updated';
+                document.getElementById('resultMessage').textContent = `${row.name}'s request is now ${newStatus}.`;
+                closeModal();
+                document.getElementById('resultModal').classList.add('active');
+                renderTable();
+                updateStats();
+            } catch (error) {
+                alert('Unable to update status: ' + error.message);
+                console.error('Admin status update failed:', error);
+            }
+        }
+
+        function closeModal() { document.getElementById('confirmationModal').classList.remove('active'); pendingAction = null; }
+        function closeResultModal() { document.getElementById('resultModal').classList.remove('active'); }
+        function showDetailsModal(id) {
+            const row = allData.find((r) => r.id === id);
+            if (!row) return;
+            document.getElementById('detailsTitle').textContent = `Request Details - ${row.requestId}`;
+            const fields = [['Requester', row.name], ['Email', row.email], ['Phone', row.phone], ['Department', row.department], ['Location', row.location], ['Party / Beneficiary', row.partyName], ['Work Order No.', row.workOrderNo], ['Type of Work', row.typeOfWork], ['Job Value', formatAmount(row.jobValue)], ['BG Nature', row.bgNature], ['BG Amount', formatAmount(row.bgAmount)], ['BG Expiry Date', row.bgExpiryDate], ['Claim Period', row.bgClaimPeriod], ['Approval Tier', row.approvalTier], ['Status', statusLabel(row.status)], ['Admin Note', row.adminNote || 'N/A'], ['Remarks', row.remarks || 'N/A']];
+            const trace = Array.isArray(row.statusTimeline) && row.statusTimeline.length
+                ? `<div style="margin-top:14px;padding-top:10px;border-top:1px solid #e5e7eb;"><strong>Status Trace</strong>${row.statusTimeline.map(t => `<div style="margin-top:8px;padding:8px;border-radius:10px;background:#f8fafc;"><b>${escapeHtml(t.to || '-')}</b> <span style="color:#64748b;">${escapeHtml(t.at || '')}</span><br><small>${escapeHtml(t.note || '')}</small></div>`).join('')}</div>`
+                : '';
+            document.getElementById('detailsContent').innerHTML = fields.map(([label, value]) => `<div style="display:grid;grid-template-columns:180px 1fr;border-bottom:1px solid #eee;padding:7px 0;gap:10px;"><strong>${label}</strong><span>${escapeHtml(value || 'N/A')}</span></div>`).join('') + trace;
+            document.getElementById('detailsModal').classList.add('active');
+        }
+        function closeDetailsModal() { document.getElementById('detailsModal').classList.remove('active'); }
+        function showEditModal(id) { const row = allData.find((r) => r.id === id); if (!row) return; editingId = id; document.getElementById('editName').value = row.name || ''; document.getElementById('editEmail').value = row.email || ''; document.getElementById('editPhone').value = row.phone || ''; document.getElementById('editStatus').value = row.status || 'pending'; document.getElementById('editModal').classList.add('active'); }
+        function closeEditModal() { document.getElementById('editModal').classList.remove('active'); editingId = null; }
+        async function saveEdit() { if (!editingId) return; const row = allData.find((r) => r.id === editingId); if (!row) return; const name = document.getElementById('editName').value.trim(); const email = document.getElementById('editEmail').value.trim(); const phone = document.getElementById('editPhone').value.trim(); const status = document.getElementById('editStatus').value; try { const res = await fetch(`/api/requests/${encodeURIComponent(editingId)}`, { method: 'PUT', headers: authHeaders({ 'Content-Type': 'application/json' }), body: JSON.stringify({ name, email, phone, status }) }); const data = await res.json(); if (!res.ok) throw new Error(data.message || 'Unable to save request details.'); Object.assign(row, { name, email, phone, status: statusKey(data.status || status) }); closeEditModal(); renderTable(); updateStats(); alert('Request details updated successfully.'); } catch (error) { alert('Failed to save request: ' + error.message); console.error('saveEdit error:', error); } }
+        async function loadUsersFromFile() { try { const res = await fetch('/api/requests', { cache: 'no-store', headers: authHeaders() }); if (!res.ok) throw new Error('Failed to fetch requests from server'); const data = await res.json(); if (!Array.isArray(data)) throw new Error('Invalid requests response format'); allData = data.map((req) => ({ id: req._id || req.requestId, requestId: req.requestId || req._id, name: req.firstOwner || req.ownerName || req.name || 'Requester', email: req.email || '', phone: req.phone || req.ownerPersonalNo || '', submittedOn: req.requestDate || req.submittedOn || (req.createdAt ? new Date(req.createdAt).toISOString().slice(0, 10) : ''), status: statusKey(req.status || 'Pending'), attachments: req.attachments || {}, department: req.department || '', location: req.location || '', partyName: req.partyName || '', workOrderNo: req.workOrderNo || '', typeOfWork: req.typeOfWork || '', jobValue: req.jobValue || '', bgNature: req.bgNature || '', bgAmount: req.bgAmount || '', bgExpiryDate: req.bgExpiryDate || '', bgClaimPeriod: req.bgClaimPeriod || '', approvalTier: req.approvalTier || '', remarks: req.remarks || '', adminNote: req.adminNote || '', statusTimeline: req.statusTimeline || [] })); renderTable(); updateStats(); } catch (err) { allData = []; renderTable(); updateStats(); alert('Error loading requests: ' + err.message); } }
+        function downloadCurrentData() { window.location.href = '/api/requests/download?token=' + encodeURIComponent(localStorage.getItem('bgToken') || ''); }
+    </script>
+</body>
+</html>

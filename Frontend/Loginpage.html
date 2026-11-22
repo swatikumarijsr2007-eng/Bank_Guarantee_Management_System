@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Signup/Login Page</title>
+
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+    
+        .container.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+       
+        body{
+            height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            background:#f2f2f2;
+        }
+
+        .container{
+            width:900px;
+            height:520px;
+            background:white;
+            border-radius:15px;
+            overflow:hidden;
+            display:flex;
+            box-shadow:0 5px 20px rgba(0,0,0,0.2);
+            /* Slide-in initial state */
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .hidden-box {
+            display: none !important;
+        }
+
+        /* Custom Alert Modal Styling */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            width: 380px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+            transform: scale(0.8);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .modal-overlay.active .modal-card {
+            transform: scale(1);
+        }
+
+        .modal-icon {
+            width: 60px;
+            height: 60px;
+            color: white;
+            font-size: 32px;
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-icon.success {
+            background: #4caf50;
+        }
+
+        .modal-icon.error {
+            background: #f44336;
+        }
+
+        .modal-card h2 {
+            font-size: 24px;
+            color: #222;
+            margin-bottom: 10px;
+        }
+
+        .modal-card p {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .modal-btn {
+            padding: 10px 30px;
+            background: linear-gradient(to right, #02006b, #0000ff);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 255, 0.2);
+            outline: none;
+        }
+
+        .modal-btn:hover {
+            opacity: 0.9;
+        }
+
+        /* LEFT SIDE */
+
+        .left{
+            width:50%;
+            padding:24px 40px 18px 40px;
+            text-align:center;
+            background:white;
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+        }
+
+        .left h1{
+            font-size:42px;
+            margin-bottom:16px;
+            font-weight:bold;
+        }
+
+        .input-box{
+            width:100%;
+            margin-bottom:12px;
+        }
+
+        .input-box input{
+            width:100%;
+            padding:11px 16px;
+            border:2px solid #d3d3d3;
+            border-radius:4px;
+            font-size:16px;
+            outline:none;
+            background:#f7f7f7;
+        }
+
+        .note{
+            font-size:13px;
+            color:#444;
+            margin-top:-6px;
+            margin-bottom:10px;
+        }
+
+        .back{
+            display:block;
+            margin:10px 0;
+            text-decoration:none;
+            color:#222;
+            font-size:16px;
+            font-weight:bold;
+            transition: color 0.2s;
+        }
+
+        .back:hover {
+            color: #0000ff;
+        }
+
+        .btn{
+            width:180px;
+            padding:11px;
+            border:none;
+            border-radius:30px;
+            background:linear-gradient(to right,#02006b,#0000ff);
+            color:white;
+            font-size:16px;
+            font-weight:bold;
+            cursor:pointer;
+            transition: transform 0.2s, opacity 0.2s;
+            box-shadow: 0 4px 10px rgba(0, 0, 255, 0.25);
+            margin: 0 auto;
+        }
+
+        .btn:hover{
+            opacity:0.9;
+            transform: translateY(-2px);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        /* RIGHT SIDE */
+
+        .right{
+            width:50%;
+            background:linear-gradient(to bottom right,#7b1fa2,#001f9f);
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            position:relative;
+        }
+
+        .logo-box{
+            background:white;
+            width:85%;
+            padding:15px;
+            text-align:center;
+        }
+
+        .logo-box img{
+            width:80px;
+            margin-bottom:10px;
+        }
+
+        .logo-box h3{
+            color:#004aad;
+            font-size:16px;
+        }
+
+        /* Responsive */
+
+        @media(max-width:768px){
+
+            .container{
+                flex-direction:column;
+                width:95%;
+                height:auto;
+            }
+
+            .left,
+            .right{
+                width:100%;
+            }
+
+            .right{
+                height:250px;
+            }
+        }
+
+        /* Forgot Password Container and Link Styling */
+        .forgot-container {
+            text-align: right;
+            margin-top: -4px;
+            margin-bottom: 12px;
+            width: 100%;
+        }
+
+        .forgot-link {
+            text-decoration: none;
+            color: #666;
+            font-size: 14px;
+            font-weight: bold;
+            transition: color 0.2s;
+            display: inline-block;
+        }
+
+        .forgot-link:hover {
+            color: #0000ff;
+        }
+
+        /* Smooth Fade-In Animation */
+        .fade-in {
+            animation: fadeInForm 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes fadeInForm {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Admin Toggle Styling */
+        .admin-toggle {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 16px;
+            gap: 10px;
+        }
+
+        .toggle-radio {
+            display: none;
+        }
+
+        .toggle-label {
+            padding: 8px 16px;
+            border: 2px solid #d3d3d3;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            background: #f7f7f7;
+            color: #666;
+        }
+
+        .toggle-radio:checked + .toggle-label {
+            background: linear-gradient(to right, #02006b, #0000ff);
+            color: white;
+            border-color: #0000ff;
+            box-shadow: 0 4px 10px rgba(0, 0, 255, 0.2);
+        }
+
+        .toggle-label:hover {
+            border-color: #0000ff;
+        }
+
+        #adminUsernameBox {
+            display: none;
+        }
+
+        #adminUsernameBox.show {
+            display: block;
+        }
+
+
+
+        /* Clean connectivity/admin polish patch */
+        .input-box { position: relative; }
+        .input-box input { border-radius: 10px; border: 1px solid #d7dce5; background: #f8fafc; transition: border-color .2s, box-shadow .2s, background .2s; }
+        .input-box input:focus { border-color: #004aad; background:#fff; box-shadow: 0 0 0 4px rgba(0,74,173,.10); }
+        .input-box.has-eye input { padding-right: 48px; }
+        .eye-btn { position:absolute; right:10px; top:50%; transform:translateY(-50%); width:32px; height:32px; border:0; border-radius:8px; background:#edf2ff; color:#004aad; cursor:pointer; font-size:15px; display:grid; place-items:center; }
+        .eye-btn:hover { background:#dbeafe; }
+        .demo-card { margin-top: 18px; background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.24); border-radius: 16px; padding: 14px; color: #fff; font-size: 13px; line-height: 1.7; text-align:left; backdrop-filter: blur(8px); }
+        .demo-card b { color:#fff; }
+        .demo-card code { background: rgba(0,0,0,.25); padding: 2px 6px; border-radius: 7px; font-family: Consolas, monospace; color: #fff; }
+        .btn { min-height: 44px; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <!-- LEFT SIDE -->
+
+        <div class="left">
+
+            <h1 id="formTitle">Sign Up</h1>
+
+            <form id="authForm" onsubmit="handleFormSubmit(event)">
+                
+                <!-- Admin Toggle (visible only in login mode) -->
+                <div class="admin-toggle hidden-box" id="adminToggle">
+                    <input type="radio" id="userLoginRadio" class="toggle-radio" name="loginType" value="user" checked>
+                    <label for="userLoginRadio" class="toggle-label">User Login</label>
+                    
+                    <input type="radio" id="adminLoginRadio" class="toggle-radio" name="loginType" value="admin">
+                    <label for="adminLoginRadio" class="toggle-label">Admin Login</label>
+                </div>
+
+                <div class="input-box" id="personalNoBox">
+                    <input type="text" id="personalNo" placeholder="Phone Number" required>
+                </div>
+
+                <div class="note" id="userIdNote">
+                    Phone Number must be exactly 10 digits
+                </div>
+
+                <div class="input-box hidden-box" id="adminIdBox">
+                    <input type="text" id="adminId" placeholder="Admin ID">
+                </div>
+
+                <div class="input-box hidden-box" id="adminUsernameBox">
+                    <input type="text" id="adminUsername" placeholder="Admin Username">
+                </div>
+
+                <div class="input-box hidden-box" id="otpBox">
+                    <input type="text" id="otp" placeholder="Enter 6-Digit OTP">
+                </div>
+
+                <div class="input-box" id="emailBox">
+                    <input type="email" id="email" placeholder="Email" required>
+                </div>
+
+                <div class="input-box has-eye" id="passwordBox">
+                    <input type="password" id="password" placeholder="Password" required>
+                    <button class="eye-btn" type="button" data-eye="password" aria-label="Show or hide password">👁</button>
+                </div>
+
+                <div class="forgot-container hidden-box" id="forgotContainer">
+                    <a href="#" id="forgotLink" class="forgot-link">Forgot Password?</a>
+                </div>
+
+                <div class="input-box has-eye" id="confirmPasswordBox">
+                    <input type="password" id="confirmPassword" placeholder="Confirm New Password" required>
+                    <button class="eye-btn" type="button" data-eye="confirmPassword" aria-label="Show or hide confirm password">👁</button>
+                </div>
+
+                <a href="#" id="toggleLink" class="back">Back to Login!</a>
+
+                <button type="submit" id="submitBtn" class="btn">SUBMIT NOW</button>
+            </form>
+
+        </div>
+
+        <!-- RIGHT SIDE -->
+
+        <div class="right">
+
+            <div class="logo-box">
+
+                <!-- Replace logo.png with your image -->
+                <img src="Tata.png" alt="Tata Steel Logo" />
+
+                <h3>
+                    TATA STEEL UTILITIES AND INFRASTRUCTURE SERVICES LIMITED
+                </h3>
+
+                
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Custom Premium Modal -->
+    <div id="customAlert" class="modal-overlay" style="left: -4px; top: -15px;">
+        <div class="modal-card">
+            <div id="modalIcon" class="modal-icon success">✓</div>
+            <h2 id="modalTitle">Success!</h2>
+            <p id="modalMessage">Your action was completed successfully.</p>
+            <button onclick="closeModal()" class="modal-btn">OK</button>
+        </div>
+    </div>
+
+    <script>        let currentMode = 'signup'; // 'signup' | 'login' | 'forgot' | 'otp-verify' | 'admin-login'
+        let simulatedOTP = '';      // Dynamic OTP holder for prototyping
+        let pendingLogin = null;    // Holds login/admin OTP session from backend
+        let isAdminLogin = false;   // Toggle for admin login
+
+        // Slide-in animation on DOM load
+        window.addEventListener('DOMContentLoaded', () => {
+            const role = localStorage.getItem('role');
+            if (role === 'user') {
+                window.location.href = '/user';
+                return;
+            } else if (role === 'admin') {
+                window.location.href = '/admin';
+                return;
+            }
+
+            const container = document.querySelector('.container');
+            setTimeout(() => {
+                container.classList.add('show');
+            }, 100);
+            switchMode('signup'); // Initialize default attributes & inputs cleanly!
+        });
+
+        // Toggle Login, Signup, Forgot Password & OTP forms
+        const toggleLink = document.getElementById('toggleLink');
+        const forgotLink = document.getElementById('forgotLink');
+        const forgotContainer = document.getElementById('forgotContainer');
+        const formTitle = document.getElementById('formTitle');
+        const adminToggle = document.getElementById('adminToggle');
+        const userLoginRadio = document.getElementById('userLoginRadio');
+        const adminLoginRadio = document.getElementById('adminLoginRadio');
+        
+        // Form layout boxes
+        const personalNoBox = document.getElementById('personalNoBox');
+        const adminIdBox = document.getElementById('adminIdBox');
+        const adminUsernameBox = document.getElementById('adminUsernameBox');
+        const userIdNote = document.getElementById('userIdNote');
+        const otpBox = document.getElementById('otpBox');
+        const emailBox = document.getElementById('emailBox');
+        const passwordBox = document.getElementById('passwordBox');
+        const confirmPasswordBox = document.getElementById('confirmPasswordBox');
+        const submitBtn = document.getElementById('submitBtn');
+        const authForm = document.getElementById('authForm');
+
+        // Fields
+        const emailInput = document.getElementById('email');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        const personalNoInput = document.getElementById('personalNo');
+        const adminIdInput = document.getElementById('adminId');
+        const adminUsernameInput = document.getElementById('adminUsername');
+        const otpInput = document.getElementById('otp');
+        const passwordInput = document.getElementById('password');
+
+        document.querySelectorAll('.eye-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const input = document.getElementById(btn.dataset.eye);
+                if (!input) return;
+                input.type = input.type === 'password' ? 'text' : 'password';
+                btn.textContent = input.type === 'password' ? '👁' : '🙈';
+            });
+        });
+
+        // Admin login toggle event listeners
+        userLoginRadio.addEventListener('change', () => {
+            isAdminLogin = false;
+            adminIdBox.classList.remove('show');
+            adminIdBox.classList.add('hidden-box');
+            adminUsernameBox.classList.remove('show');
+            adminUsernameBox.classList.add('hidden-box');
+            personalNoBox.classList.remove('hidden-box');   
+            userIdNote.classList.remove('hidden-box');
+            personalNoInput.setAttribute('required', 'true');
+            adminIdInput.removeAttribute('required');
+            adminUsernameInput.removeAttribute('required');
+            
+            // Clear credentials
+            adminIdInput.value = '';
+            adminUsernameInput.value = '';
+            passwordInput.value = '';
+            personalNoInput.value = '';
+        });
+
+        adminLoginRadio.addEventListener('change', () => {
+            isAdminLogin = true;
+            adminIdBox.classList.add('show');
+            adminIdBox.classList.remove('hidden-box');
+            adminUsernameBox.classList.add('show');
+            adminUsernameBox.classList.remove('hidden-box');
+            personalNoBox.classList.add('hidden-box');
+            userIdNote.classList.add('hidden-box');
+            personalNoInput.removeAttribute('required');
+            adminIdInput.setAttribute('required', 'true');
+            adminUsernameInput.setAttribute('required', 'true');
+            
+            // Clear credentials when switching modes
+            adminIdInput.value = '';
+            adminUsernameInput.value = '';
+            passwordInput.value = '';
+            personalNoInput.value = '';
+        });
+
+
+        function finishLoginFromPayload(payload) {
+            if (payload.role === 'admin') {
+                localStorage.setItem('role', 'admin');
+                localStorage.setItem('bgToken', payload.token || payload.sessionToken || '');
+                localStorage.setItem('adminId', payload.adminId || '');
+                localStorage.setItem('adminUsername', payload.adminUsername || '');
+                localStorage.setItem('adminPhone', payload.adminPhone || '700001');
+                localStorage.setItem('userName', payload.displayName || payload.adminUsername || 'Admin');
+                showModal('Success!', `Admin login successful. Welcome back, ${payload.displayName || payload.adminUsername || 'Admin'}! Redirecting to admin dashboard...`, 'success');
+                setTimeout(() => { closeModal(); window.location.href = '/admin'; }, 1200);
+                return;
+            }
+            localStorage.setItem('role', 'user');
+            localStorage.setItem('bgToken', payload.token || payload.sessionToken || '');
+            localStorage.setItem('userPhone', payload.personalNo || '');
+            localStorage.setItem('userEmail', payload.email || '');
+            localStorage.setItem('userName', payload.displayName || ('User ' + (payload.personalNo || '')));
+            showModal('Success!', 'Login successful. Redirecting to your dashboard...', 'success');
+            setTimeout(() => { closeModal(); window.location.href = '/user'; }, 1200);
+        }
+
+        function showLoginOtpMode(payload) {
+            pendingLogin = payload;
+            simulatedOTP = payload.otp || '';
+            currentMode = 'login-otp';
+            formTitle.textContent = 'Verify OTP';
+            adminToggle.classList.add('hidden-box');
+            personalNoBox.classList.add('hidden-box');
+            adminIdBox.classList.remove('show');
+            adminIdBox.classList.add('hidden-box');
+            adminUsernameBox.classList.remove('show');
+            adminUsernameBox.classList.add('hidden-box');
+            userIdNote.classList.add('hidden-box');
+            emailBox.classList.add('hidden-box');
+            passwordBox.classList.add('hidden-box');
+            confirmPasswordBox.classList.add('hidden-box');
+            forgotContainer.classList.add('hidden-box');
+            otpBox.classList.remove('hidden-box');
+            otpBox.classList.add('fade-in');
+            otpInput.setAttribute('required', 'true');
+            submitBtn.textContent = 'VERIFY OTP';
+            toggleLink.textContent = 'Back to Login!';
+            showModal('OTP Generated', `Your demo OTP is: ${simulatedOTP}. Enter the same OTP to continue.`, 'success');
+        }
+
+        // Switch modes with micro-animations
+        function switchMode(mode) {
+            currentMode = mode;
+            if (mode !== 'login-otp') pendingLogin = null;
+            authForm.reset();
+            userLoginRadio.checked = true;
+            adminLoginRadio.checked = false;
+            isAdminLogin = false;
+
+            // Reset password input placeholder
+            passwordInput.placeholder = 'Password';
+
+            // Remove fade-in class from all containers to retrigger it
+            const animElements = [personalNoBox, adminIdBox, adminUsernameBox, userIdNote, otpBox, emailBox, passwordBox, forgotContainer, confirmPasswordBox];
+            animElements.forEach(el => {
+                if (el) {
+                    el.classList.remove('fade-in');
+                }
+            });
+
+            if (currentMode === 'signup') {
+                formTitle.textContent = 'Sign Up';
+                adminToggle.classList.add('hidden-box');
+                
+                // Show/Hide divs
+                personalNoBox.classList.remove('hidden-box');
+                adminIdBox.classList.remove('show');
+                adminIdBox.classList.add('hidden-box');
+                adminUsernameBox.classList.remove('show');
+                adminUsernameBox.classList.add('hidden-box');
+                userIdNote.classList.remove('hidden-box');
+                otpBox.classList.remove('show');
+                otpBox.classList.add('hidden-box');
+                emailBox.classList.remove('hidden-box');
+                passwordBox.classList.remove('hidden-box');
+                confirmPasswordBox.classList.remove('hidden-box');
+                forgotContainer.classList.add('hidden-box');
+
+                // Required status
+                personalNoInput.setAttribute('required', 'true');
+                adminIdInput.removeAttribute('required');
+                adminUsernameInput.removeAttribute('required');
+                otpInput.removeAttribute('required');
+                emailInput.setAttribute('required', 'true');
+                passwordInput.setAttribute('required', 'true');
+                confirmPasswordInput.setAttribute('required', 'true');
+
+                // Text and action links
+                toggleLink.textContent = 'Back to Login!';
+                submitBtn.textContent = 'SUBMIT NOW';
+
+            } else if (currentMode === 'login') {
+                formTitle.textContent = 'Login';
+                adminToggle.classList.remove('hidden-box');
+
+                // Show/Hide divs
+                personalNoBox.classList.remove('hidden-box');
+                adminIdBox.classList.remove('show');
+                adminIdBox.classList.add('hidden-box');
+                adminUsernameBox.classList.remove('show');
+                adminUsernameBox.classList.add('hidden-box');
+                userIdNote.classList.add('hidden-box');
+                otpBox.classList.remove('show');
+                otpBox.classList.add('hidden-box');
+                emailBox.classList.add('hidden-box');
+                passwordBox.classList.remove('hidden-box');
+                confirmPasswordBox.classList.add('hidden-box');
+                forgotContainer.classList.remove('hidden-box');
+
+                // Required status
+                personalNoInput.setAttribute('required', 'true');
+                adminIdInput.removeAttribute('required');
+                adminUsernameInput.removeAttribute('required');
+                otpInput.removeAttribute('required');
+                emailInput.removeAttribute('required');
+                passwordInput.setAttribute('required', 'true');
+                confirmPasswordInput.removeAttribute('required');
+
+                // Text and action links
+                toggleLink.textContent = "Don't have an account? Sign Up!";
+                submitBtn.textContent = 'LOGIN NOW';
+
+            } else if (currentMode === 'forgot') {
+                formTitle.textContent = 'Forgot Password';
+                adminToggle.classList.add('hidden-box');
+
+                // Show/Hide divs
+                personalNoBox.classList.remove('hidden-box');
+                adminIdBox.classList.remove('show');
+                adminIdBox.classList.add('hidden-box');
+                adminUsernameBox.classList.remove('show');
+                adminUsernameBox.classList.add('hidden-box');
+                userIdNote.classList.add('hidden-box');
+                otpBox.classList.remove('show');
+                otpBox.classList.add('hidden-box');
+                emailBox.classList.add('hidden-box');
+                passwordBox.classList.add('hidden-box');
+                confirmPasswordBox.classList.add('hidden-box');
+                forgotContainer.classList.add('hidden-box');
+
+                // Required status
+                personalNoInput.setAttribute('required', 'true');
+                adminIdInput.removeAttribute('required');
+                adminUsernameInput.removeAttribute('required');
+                otpInput.removeAttribute('required');
+                emailInput.removeAttribute('required');
+                passwordInput.removeAttribute('required');
+                confirmPasswordInput.removeAttribute('required');
+
+                // Text and action links
+                toggleLink.textContent = 'Back to Login!';
+                submitBtn.textContent = 'SEND OTP';
+
+            } else if (currentMode === 'otp-verify') {
+                formTitle.textContent = 'Verify OTP';
+                adminToggle.classList.add('hidden-box');
+                passwordInput.placeholder = 'New Password';
+
+                // Show/Hide divs
+                personalNoBox.classList.add('hidden-box');
+                adminIdBox.classList.remove('show');
+                adminIdBox.classList.add('hidden-box');
+                adminUsernameBox.classList.remove('show');
+                adminUsernameBox.classList.add('hidden-box');
+                userIdNote.classList.add('hidden-box');
+                otpBox.classList.remove('hidden-box');
+                otpBox.classList.add('show');
+                emailBox.classList.add('hidden-box');
+                passwordBox.classList.remove('hidden-box');
+                confirmPasswordBox.classList.remove('hidden-box');
+                forgotContainer.classList.add('hidden-box');
+
+                // Required status
+                personalNoInput.removeAttribute('required');
+                otpInput.setAttribute('required', 'true');
+                emailInput.removeAttribute('required');
+                passwordInput.setAttribute('required', 'true');
+                confirmPasswordInput.setAttribute('required', 'true');
+
+                // Text and action links
+                toggleLink.textContent = 'Back to Login!';
+                submitBtn.textContent = 'RESET PASSWORD';
+            }
+
+            // Trigger fade-in animations on active items
+            setTimeout(() => {
+                animElements.forEach(el => {
+                    if (el && !el.classList.contains('hidden-box')) {
+                        el.classList.add('fade-in');
+                    }
+                });
+            }, 10);
+        }
+
+        // Toggle triggers
+        toggleLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (currentMode === 'signup') {
+                switchMode('login');
+            } else if (currentMode === 'login') {
+                switchMode('signup');
+            } else if (currentMode === 'login-otp' || currentMode === 'forgot' || currentMode === 'otp-verify') {
+                switchMode('login');
+            }
+        });
+
+        forgotLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            switchMode('forgot');
+        });
+
+        // Form Submit Handler
+        // Form Submit Handler
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            
+            if (currentMode === 'signup') {
+                const personalNo = personalNoInput.value.trim();
+                const email = emailInput.value.trim();
+                const password = passwordInput.value;
+                const confirmPassword = confirmPasswordInput.value;
+                
+                // 1. Personal No Validation (exactly 6 or 10 digits)
+                if (!/^\d{6}$|^\d{10}$/.test(personalNo)) {
+                    showModal('Validation Error', 'Personal No. / Phone Number must be exactly 6 or 10 digits.', 'error');
+                    return;
+                }
+                
+                // 2. Email Validation
+                if (!email) {
+                    showModal('Validation Error', 'Please enter your email.', 'error');
+                    return;
+                }
+                
+                // 3. Password Length Validation
+                if (password.length < 6) {
+                    showModal('Validation Error', 'Password must be at least 6 characters long.', 'error');
+                    return;
+                }
+                
+                // 4. Confirm Password Match
+                if (password !== confirmPassword) {
+                    showModal('Validation Error', 'Password and Confirm Password do not match.', 'error');
+                    return;
+                }
+                
+                // Connect signup to Backend
+                fetch('/api/signup', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ personalNo, email, password, displayName: email.split('@')[0] })
+                })
+                .then(res => res.json().then(data => ({ status: res.status, body: data })))
+                .then(res => {
+                    if (res.status === 201) {
+                        showModal('Success!', 'Registration successful. Welcome to TATA STEEL UI Portal!', 'success');
+                        authForm.reset();
+                        setTimeout(() => {
+                            closeModal();
+                            switchMode('login');
+                        }, 2000);
+                    } else {
+                        showModal('Registration Failed', res.body.message || 'Error occurred.', 'error');
+                    }
+                })
+                .catch(err => {
+                    showModal('Error', 'Unable to connect to backend server.', 'error');
+                    console.error('Signup error:', err);
+                });
+
+            } else if (currentMode === 'login') {
+                if (isAdminLogin) {
+                    // ADMIN LOGIN
+                    const adminId = adminIdInput.value.trim();
+                    const adminUsername = adminUsernameInput.value.trim();
+                    const password = passwordInput.value;
+                    
+                    // 1. Admin ID Validation
+                    if (!adminId) {
+                        showModal('Validation Error', 'Please enter your admin ID.', 'error');
+                        return;
+                    }
+                    
+                    // 2. Admin Username Validation
+                    if (!adminUsername) {
+                        showModal('Validation Error', 'Please enter your admin username.', 'error');
+                        return;
+                    }
+                    
+                    // 3. Password Length Validation
+                    if (password.length < 6) {
+                        showModal('Validation Error', 'Password must be at least 6 characters long.', 'error');
+                        return;
+                    }
+                    
+                    // Connect admin login to Backend
+                    fetch('/api/admin-login', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ adminId, adminUsername, password })
+                    })
+                    .then(res => res.json().then(data => ({ status: res.status, body: data })))
+                    .then(res => {
+                        if (res.status === 200) {
+                            if (res.body.requiresOtp) {
+                                showLoginOtpMode(res.body);
+                            } else {
+                                finishLoginFromPayload(res.body);
+                            }
+                        } else {
+                            showModal('Login Failed', res.body.message || 'Invalid admin credentials.', 'error');
+                        }
+                    })
+                    .catch(err => {
+                        showModal('Error', 'Unable to connect to backend server.', 'error');
+                        console.error('Admin login error:', err);
+                    });
+
+                } else {
+                    // USER LOGIN
+                    const personalNo = personalNoInput.value.trim();
+                    const password = passwordInput.value;
+                    
+                    // 1. Personal No Validation (exactly 6 or 10 digits)
+                    if (!/^\d{6}$|^\d{10}$/.test(personalNo)) {
+                        showModal('Validation Error', 'Personal No. / Phone Number must be exactly 6 or 10 digits.', 'error');
+                        return;
+                    }
+                    
+                    // 2. Password Length Validation
+                    if (password.length < 6) {
+                        showModal('Validation Error', 'Password must be at least 6 characters long.', 'error');
+                        return;
+                    }
+                    
+                    // Connect user login to Backend
+                    fetch('/api/login', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ personalNo, password })
+                    })
+                    .then(res => res.json().then(data => ({ status: res.status, body: data })))
+                    .then(res => {
+                        if (res.status === 200) {
+                            if (res.body.requiresOtp) {
+                                showLoginOtpMode(res.body);
+                            } else {
+                                finishLoginFromPayload(res.body);
+                            }
+                        } else {
+                            showModal('Login Failed', res.body.message || 'Invalid user credentials.', 'error');
+                        }
+                    })
+                    .catch(err => {
+                        showModal('Error', 'Unable to connect to backend server.', 'error');
+                        console.error('User login error:', err);
+                    });
+                }
+            } else if (currentMode === 'login-otp') {
+                const otp = otpInput.value.trim();
+                if (!pendingLogin || !pendingLogin.otpToken) {
+                    showModal('Session Expired', 'Please login again to generate a new OTP.', 'error');
+                    switchMode('login');
+                    return;
+                }
+                if (!/^\d{6}$/.test(otp)) {
+                    showModal('Validation Error', 'Please enter the 6-digit OTP.', 'error');
+                    return;
+                }
+                fetch('/api/verify-login-otp', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ otpToken: pendingLogin.otpToken, otp })
+                })
+                .then(res => res.json().then(data => ({ status: res.status, body: data })))
+                .then(res => {
+                    if (res.status === 200) {
+                        finishLoginFromPayload(res.body);
+                    } else {
+                        showModal('OTP Failed', res.body.message || 'Incorrect OTP.', 'error');
+                    }
+                })
+                .catch(err => {
+                    showModal('Error', 'Unable to connect to backend server.', 'error');
+                    console.error('OTP verification error:', err);
+                });
+            } else if (currentMode === 'forgot') {
+                const personalNo = personalNoInput.value.trim();
+                
+                // 1. Personal No Validation (exactly 6 or 10 digits)
+                if (!/^\d{6}$|^\d{10}$/.test(personalNo)) {
+                    showModal('Validation Error', 'Personal No. / Phone Number must be exactly 6 or 10 digits.', 'error');
+                    return;
+                }
+                
+                // Success - Simulated OTP generation
+                simulatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
+                showModal('OTP Sent!', `A 6-digit verification code has been simulated for your registered number ${personalNo}. For prototype testing, enter OTP: ${simulatedOTP }`, 'success');
+                switchMode('otp-verify');
+            } else if (currentMode === 'otp-verify') {
+                const otp = otpInput.value.trim();
+                const password = passwordInput.value;
+                const confirmPassword = confirmPasswordInput.value;
+                
+                // 1. OTP Code match validation
+                if (otp !== simulatedOTP) {
+                    showModal('Validation Error', 'Incorrect OTP. Please enter the simulated OTP provided in the success modal.', 'error');
+                    return;
+                }
+                
+                // 2. Password Length Validation
+                if (password.length < 6) {
+                    showModal('Validation Error', 'Password must be at least 6 characters long.', 'error');
+                    return;
+                }
+                
+                // 3. Password Match Validation
+                if (password !== confirmPassword) {
+                    showModal('Validation Error', 'Password and Confirm Password do not match.', 'error');
+                    return;
+                }
+                
+                // Success - Password Reset
+                showModal('Success!', 'Your password has been successfully reset! You can now log in using your new password.', 'success');
+                switchMode('login');
+            }
+        }
+
+        // Custom Modal Control
+        const customAlert = document.getElementById('customAlert');
+        const modalIcon = document.getElementById('modalIcon');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalMessage = document.getElementById('modalMessage');
+
+        function showModal(title, message, type) {
+            modalTitle.textContent = title;
+            modalMessage.textContent = message;
+            
+            if (type === 'success') {
+                modalIcon.textContent = '✓';
+                modalIcon.className = 'modal-icon success';
+            } else {
+                modalIcon.textContent = '✗';
+                modalIcon.className = 'modal-icon error';
+            }
+            
+            customAlert.classList.add('active');
+        }
+
+        function closeModal() {
+            customAlert.classList.remove('active');
+        }
+    </script>
+
+</body>
+</html>         
