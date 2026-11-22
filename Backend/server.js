@@ -604,7 +604,8 @@ app.use((err, req, res, next) => {
   res.status(500).json({ success: false, message: err?.message || 'Internal Server Error' });
 });
 
-app.listen(PORT, () => {
+if (process.env.VERCEL !== '1') {
+  app.listen(PORT, () => {
   console.log('====================================================');
   console.log(`Bank Guarantee Portal running: http://localhost:${PORT}`);
   console.log('Storage: LOCAL ONLY. Cloud upload removed. MongoDB removed.');
@@ -613,4 +614,7 @@ app.listen(PORT, () => {
   console.log('Admin login: Number 700001 | ID ADMIN001 | Username admin1 | Password admin123');
   console.log('User login: Phone 9876543210 | Password password123');
   console.log('====================================================');
-});
+  });
+}
+
+export default app;
