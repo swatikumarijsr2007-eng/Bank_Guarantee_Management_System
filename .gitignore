@@ -9,3 +9,7 @@ Backend/.env
 # OS files
 .DS_Store
 Thumbs.db
+
+# Uploaded application files
+Backend/uploads/*
+!Backend/uploads/.gitkeep
