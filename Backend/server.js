@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import path from 'path';
 import fs from 'fs';
+import os from 'os';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 import bcrypt from 'bcryptjs';
@@ -15,8 +16,15 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = Number(process.env.PORT || 7000);
-const DATA_DIR = path.join(__dirname, 'data');
-const UPLOAD_DIR = path.join(__dirname, 'uploads');
+const isServerless =
+  process.env.VERCEL === '1' ||
+  Boolean(process.env.VERCEL_ENV) ||
+  Boolean(process.env.AWS_LAMBDA_FUNCTION_NAME);
+const STORAGE_DIR = isServerless
+  ? path.join(os.tmpdir(), 'bank-guarantee-management-system')
+  : __dirname;
+const DATA_DIR = path.join(STORAGE_DIR, 'data');
+const UPLOAD_DIR = path.join(STORAGE_DIR, 'uploads');
 const DB_PATH = path.join(DATA_DIR, 'fresh-bg-db.json');
 const FRONTEND_DIR = path.join(__dirname, '../Frontend');
 const MAX_UPLOAD_MB = Number(process.env.MAX_UPLOAD_MB || 10);
@@ -603,11 +611,6 @@ app.use((err, req, res, next) => {
   console.error('[SERVER] unhandled error:', err);
   res.status(500).json({ success: false, message: err?.message || 'Internal Server Error' });
 });
-
-const isServerless =
-  process.env.VERCEL === '1' ||
-  Boolean(process.env.VERCEL_ENV) ||
-  Boolean(process.env.AWS_LAMBDA_FUNCTION_NAME);
 
 if (!isServerless) {
   app.listen(PORT, () => {
