@@ -604,7 +604,12 @@ app.use((err, req, res, next) => {
   res.status(500).json({ success: false, message: err?.message || 'Internal Server Error' });
 });
 
-if (process.env.VERCEL !== '1') {
+const isServerless =
+  process.env.VERCEL === '1' ||
+  Boolean(process.env.VERCEL_ENV) ||
+  Boolean(process.env.AWS_LAMBDA_FUNCTION_NAME);
+
+if (!isServerless) {
   app.listen(PORT, () => {
   console.log('====================================================');
   console.log(`Bank Guarantee Portal running: http://localhost:${PORT}`);
